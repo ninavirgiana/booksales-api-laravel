@@ -11,9 +11,34 @@ class AuthorsController extends Controller
     public function index(): JsonResponse
     {
         $authors = Authors::all();
+        
+        if ($authors->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No authors found'
+            ], 404);
+        }
+
         return response()->json([
             'success' => true,
             'data' => $authors
+        ]);
+    }
+
+    public function show($id): JsonResponse
+    {
+        $author = Authors::find($id);
+        
+        if (!$author) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Author not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $author
         ]);
     }
 
@@ -32,7 +57,19 @@ class AuthorsController extends Controller
 
     public function update(Request $request, $id): JsonResponse
     {
-        $author = Authors::findOrFail($id);
+        $author = Authors::find($id);
+        
+        if (!$author) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Author not found'
+            ], 404);
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
         $author->update($request->all());
         return response()->json([
             'success' => true,
@@ -42,7 +79,15 @@ class AuthorsController extends Controller
 
     public function destroy($id): JsonResponse
     {
-        $author = Authors::findOrFail($id);
+        $author = Authors::find($id);
+        
+        if (!$author) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Author not found'
+            ], 404);
+        }
+
         $author->delete();
         return response()->json([
             'success' => true,

@@ -11,9 +11,34 @@ class GenresController extends Controller
     public function index(): JsonResponse
     {
         $genres = Genres::all();
+        
+        if ($genres->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No genres found'
+            ], 404);
+        }
+
         return response()->json([
             'success' => true,
             'data' => $genres
+        ]);
+    }
+
+    public function show($id): JsonResponse
+    {
+        $genre = Genres::find($id);
+        
+        if (!$genre) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Genre not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $genre
         ]);
     }
 
@@ -32,7 +57,19 @@ class GenresController extends Controller
 
     public function update(Request $request, $id): JsonResponse
     {
-        $genre = Genres::findOrFail($id);
+        $genre = Genres::find($id);
+        
+        if (!$genre) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Genre not found'
+            ], 404);
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
         $genre->update($request->all());
         return response()->json([
             'success' => true,
@@ -42,7 +79,15 @@ class GenresController extends Controller
 
     public function destroy($id): JsonResponse
     {
-        $genre = Genres::findOrFail($id);
+        $genre = Genres::find($id);
+        
+        if (!$genre) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Genre not found'
+            ], 404);
+        }
+
         $genre->delete();
         return response()->json([
             'success' => true,
