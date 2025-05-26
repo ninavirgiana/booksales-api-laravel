@@ -10,14 +10,14 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up()
-    {
-        Schema::create('genres', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('genres', function (Blueprint $table) {
+        $table->id();
+        $table->string('name');
+        $table->text('description')->nullable();
+        $table->timestamps();
+    });
+}
 
     
     public function down()

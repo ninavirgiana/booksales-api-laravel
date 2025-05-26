@@ -7,15 +7,15 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     public function up()
-    {
-        Schema::create('authors', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('photo');
-            $table->text('bio');
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('authors', function (Blueprint $table) {
+        $table->id();
+        $table->string('name');
+        $table->string('photo');
+        $table->text('bio');
+        $table->timestamps();
+    });
+}
 
     public function down()
     {
