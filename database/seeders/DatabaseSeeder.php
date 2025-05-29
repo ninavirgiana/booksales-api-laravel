@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,13 +12,24 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+        DB::table('transactions')->truncate();
+        DB::table('password_reset_tokens')->truncate();
+        DB::table('sessions')->truncate();
+        DB::table('books')->truncate();
+        DB::table('authors')->truncate();
+        DB::table('genres')->truncate();
+        DB::table('users')->truncate();
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $this->call([
             GenresSeeder::class,
             AuthorsSeeder::class,
-            BooksSeeder::class,
             UserSeeder::class,
+            BooksSeeder::class,
+            TransactionSeeder::class,
         ]);
     }
 }
